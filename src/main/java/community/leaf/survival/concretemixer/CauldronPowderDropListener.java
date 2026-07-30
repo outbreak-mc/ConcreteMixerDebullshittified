@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022-2024, RezzedUp and Contributors <https://github.com/LeafCommunity/ConcreteMixer>
+ * Copyright © 2022-2026, RezzedUp and Contributors <https://github.com/LeafCommunity/ConcreteMixer>
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -12,7 +12,6 @@ import community.leaf.eventful.bukkit.CancellationPolicy;
 import community.leaf.eventful.bukkit.ListenerOrder;
 import community.leaf.eventful.bukkit.annotations.CancelledEvents;
 import community.leaf.eventful.bukkit.annotations.EventListener;
-import community.leaf.survival.concretemixer.metrics.TransformationsPerHour;
 import community.leaf.survival.concretemixer.util.internal.ConcreteDebug;
 import community.leaf.tasks.TaskContext;
 import org.bukkit.Material;
@@ -40,12 +39,10 @@ public class CauldronPowderDropListener implements Listener {
 	private final Map<UUID, TaskContext<BukkitTask>> transformationTasksByItemUuid = new HashMap<>();
 	
 	private final ConcreteMixerPlugin plugin;
-	private final TransformationsPerHour counter;
 	private final boolean experimentalItemMerging;
 	
-	public CauldronPowderDropListener(ConcreteMixerPlugin plugin, TransformationsPerHour counter) {
+	public CauldronPowderDropListener(ConcreteMixerPlugin plugin) {
 		this.plugin = plugin;
-		this.counter = counter;
 		
 		this.experimentalItemMerging = ConcreteDebug.ENABLED || Boolean.parseBoolean(System.getProperty(
 			"community.leaf.survival.concretemixer.EnableExperimentalItemMerging"
@@ -233,7 +230,6 @@ public class CauldronPowderDropListener implements Listener {
 				item.setPickupDelay(10);
 				
 				plugin.effects().concreteTransform(cauldron);
-				counter.transformed(stack.getAmount());
 				
 				if (!lowerWaterLevel) {
 					return;

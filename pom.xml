@@ -1,51 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  
-  <groupId>community.leaf.survival</groupId>
-  <artifactId>concretemixer</artifactId>
-  <version>1.2.1</version>
-  
-  <name>ConcreteMixer</name>
-  <inceptionYear>2022</inceptionYear>
-  <url>https://github.com/LeafCommunity/ConcreteMixer</url>
-  <description>Throw concrete powder into a cauldron, get concrete!</description>
-  
-  <properties>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
-    
-    <maven.build.timestamp.format>yyyy</maven.build.timestamp.format>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    
-    <shade.relocation>community.leaf.survival.concretemixer.shaded</shade.relocation>
-    
-    <license.header.year>${project.inceptionYear}-${maven.build.timestamp}</license.header.year>
-    <license.header.owner>RezzedUp and Contributors</license.header.owner>
-    <license.header.url>https://github.com/LeafCommunity/ConcreteMixer</license.header.url>
-  </properties>
+	<modelVersion>4.0.0</modelVersion>
 
-  <repositories>
-    <repository>
-      <id>jitpack.io</id>
-      <url>https://jitpack.io</url>
-    </repository>
-    <repository>
-      <id>spigot-repo</id>
-      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-    </repository>
-  </repositories>
-  
-  <dependencies>
-    <!-- Spigot API (via spigot-repo) -->
-    <dependency>
-      <groupId>org.spigotmc</groupId>
-      <artifactId>spigot-api</artifactId>
-      <version>1.21.3-R0.1-SNAPSHOT</version>
-      <scope>provided</scope>
-    </dependency>
+	<groupId>community.leaf.survival</groupId>
+	<artifactId>concretemixer</artifactId>
+	<version>1.2.1</version>
+
+	<name>ConcreteMixer</name>
+	<inceptionYear>2022</inceptionYear>
+	<url>https://github.com/LeafCommunity/ConcreteMixer</url>
+	<description>Throw concrete powder into a cauldron, get concrete!</description>
+
+	<properties>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+
+		<maven.build.timestamp.format>yyyy</maven.build.timestamp.format>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<shade.relocation>community.leaf.survival.concretemixer.shaded</shade.relocation>
+
+		<license.header.year>${project.inceptionYear}-${maven.build.timestamp}</license.header.year>
+		<license.header.owner>RezzedUp and Contributors</license.header.owner>
+		<license.header.url>https://github.com/LeafCommunity/ConcreteMixer</license.header.url>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+		<repository>
+			<id>spigot-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<!-- Spigot API (via spigot-repo) -->
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-api</artifactId>
+			<version>1.21.3-R0.1-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
 		<!-- XSeries -->
 		<!-- https://github.com/CryptoMorin/XSeries/ -->
 		<dependency>
@@ -53,202 +53,175 @@
 			<artifactId>XSeries</artifactId>
 			<version>11.3.0</version>
 		</dependency>
-    <!-- Hook: GriefPrevention (via jitpack.io) -->
-    <!-- https://github.com/TechFortress/GriefPrevention -->
-    <dependency>
-      <groupId>com.github.techfortress</groupId>
-      <artifactId>griefprevention</artifactId>
-      <version>16.18</version>
-      <scope>provided</scope>
-    </dependency>
-    <!-- Java SemVer (via maven-central) -->
-    <!-- https://github.com/zafarkhaja/jsemver -->
-    <dependency>
-      <groupId>com.github.zafarkhaja</groupId>
-      <artifactId>java-semver</artifactId>
-      <version>0.9.0</version>
-    </dependency>
-    <!-- URL Encoder (via maven-central) -->
-    <!-- https://github.com/gbevin/urlencoder -->
-    <dependency>
-      <groupId>com.uwyn</groupId>
-      <artifactId>urlencoder</artifactId>
-      <version>1.3.0</version>
-    </dependency>
-    <!-- LeafCommunity ConfigValues (via jitpack.io) -->
-    <dependency>
-      <groupId>community.leaf.configvalues</groupId>
-      <artifactId>config-values-bukkit</artifactId>
-      <version>0.0.9</version>
-    </dependency>
-    <!-- LeafCommunity Eventful (via jitpack.io) -->
-    <dependency>
-      <groupId>community.leaf.eventful</groupId>
-      <artifactId>events-bukkit</artifactId>
-      <version>0.4.0</version>
-    </dependency>
-    <!-- LeafCommunity Evergreen Bukkit Server Version (via jitpack.io) -->
-    <dependency>
-      <groupId>community.leaf.evergreen</groupId>
-      <artifactId>bukkit-server-version</artifactId>
-      <version>0.0.2</version>
-    </dependency>
-    <!-- LeafCommunity Tasks (via jitpack.io) -->
-    <dependency>
-      <groupId>community.leaf.tasks</groupId>
-      <artifactId>tasks-bukkit</artifactId>
-      <version>0.0.2</version>
-    </dependency>
-    <!-- bStats (via maven-central) -->
-    <dependency>
-      <groupId>org.bstats</groupId>
-      <artifactId>bstats-bukkit</artifactId>
-      <version>3.0.0</version>
-    </dependency>
-    <!-- Nullness Annotations: @NullOr (via maven-central) -->
-    <dependency>
-      <groupId>pl.tlinkowski.annotation</groupId>
-      <artifactId>pl.tlinkowski.annotation.basic</artifactId>
-      <version>0.2.0</version>
-      <!-- Note: scope must be visible to dependent projects otherwise nullness annotations will not work as intended -->
-    </dependency>
-  </dependencies>
-  
-  <build>
-    <defaultGoal>package</defaultGoal>
-    <finalName>${project.name}-${project.version}</finalName>
-    <plugins>
-      <!-- Compile project -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.10.1</version>
-        <configuration>
-          <source>${maven.compiler.source}</source>
-          <target>${maven.compiler.target}</target>
-        </configuration>
-      </plugin>
-      <!-- Shade dependencies -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>3.4.1</version>
-        <configuration>
-          <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
-          <createDependencyReducedPom>false</createDependencyReducedPom>
-          <minimizeJar>true</minimizeJar>
-          <relocations>
+		<!-- Hook: GriefPrevention (via jitpack.io) -->
+		<!-- https://github.com/TechFortress/GriefPrevention -->
+		<dependency>
+			<groupId>com.github.techfortress</groupId>
+			<artifactId>griefprevention</artifactId>
+			<version>16.18</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- Java SemVer (via maven-central) -->
+		<!-- https://github.com/zafarkhaja/jsemver -->
+		<dependency>
+			<groupId>com.github.zafarkhaja</groupId>
+			<artifactId>java-semver</artifactId>
+			<version>0.9.0</version>
+		</dependency>
+		<!-- LeafCommunity ConfigValues (via jitpack.io) -->
+		<dependency>
+			<groupId>community.leaf.configvalues</groupId>
+			<artifactId>config-values-bukkit</artifactId>
+			<version>0.0.9</version>
+		</dependency>
+		<!-- LeafCommunity Eventful (via jitpack.io) -->
+		<dependency>
+			<groupId>community.leaf.eventful</groupId>
+			<artifactId>events-bukkit</artifactId>
+			<version>0.4.0</version>
+		</dependency>
+		<!-- LeafCommunity Evergreen Bukkit Server Version (via jitpack.io) -->
+		<dependency>
+			<groupId>community.leaf.evergreen</groupId>
+			<artifactId>bukkit-server-version</artifactId>
+			<version>0.0.2</version>
+		</dependency>
+		<!-- LeafCommunity Tasks (via jitpack.io) -->
+		<dependency>
+			<groupId>community.leaf.tasks</groupId>
+			<artifactId>tasks-bukkit</artifactId>
+			<version>0.0.2</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<defaultGoal>package</defaultGoal>
+		<finalName>${project.name}-${project.version}</finalName>
+		<plugins>
+			<!-- Compile project -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.10.1</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+				</configuration>
+			</plugin>
+			<!-- Shade dependencies -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.4.1</version>
+				<configuration>
+					<dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml
+					</dependencyReducedPomLocation>
+					<createDependencyReducedPom>false</createDependencyReducedPom>
+					<minimizeJar>true</minimizeJar>
+					<relocations>
 						<relocation>
-							<pattern>com.cryptomorin</pattern>
-							<shadedPattern>${shade.relocation}.com.cryptomorin</shadedPattern>
+							<pattern>com.github</pattern>
+							<shadedPattern>${shade.relocation}.com.github</shadedPattern>
 						</relocation>
-            <relocation>
-              <pattern>com.github</pattern>
-              <shadedPattern>${shade.relocation}.com.github</shadedPattern>
-            </relocation>
-            <relocation>
-              <!-- Keep plugin classes exactly where they are... -->
-              <pattern>community.leaf.survival</pattern>
-              <shadedPattern>community.leaf.survival</shadedPattern>
-            </relocation>
-            <relocation>
-              <pattern>community.leaf</pattern>
-              <shadedPattern>${shade.relocation}.community.leaf</shadedPattern>
-            </relocation>
-            <relocation>
-              <pattern>com.rezzedup</pattern>
-              <shadedPattern>${shade.relocation}.com.rezzedup</shadedPattern>
-            </relocation>
-            <relocation>
-              <pattern>com.uwyn</pattern>
-              <shadedPattern>${shade.relocation}.com.uwyn</shadedPattern>
-            </relocation>
-            <relocation>
-              <pattern>org.bstats</pattern>
-              <shadedPattern>${shade.relocation}.org.bstats</shadedPattern>
-            </relocation>
-          </relocations>
-          <artifactSet>
-            <!-- Exclude annotations from built jar -->
-            <excludes>
-              <exclude>com.google.code.findbugs:jsr305</exclude>
-              <exclude>org.jetbrains.kotlin:kotlin-annotations-jvm</exclude>
-              <exclude>pl.tlinkowski.annotation:pl.tlinkowski.annotation.basic</exclude>
-            </excludes>
-          </artifactSet>
-          <filters>
-            <filter>
-              <!-- Exclude redundant metadata files -->
-              <artifact>*:*</artifact>
-              <excludes>
-                <exclude>META-INF/**</exclude>
-              </excludes>
-            </filter>
-          </filters>
-        </configuration>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <!-- Add license headers -->
-      <!-- `mvn license:format` or run the `update-license-headers` configuration -->
-      <plugin>
-        <groupId>com.mycila</groupId>
-        <artifactId>license-maven-plugin</artifactId>
-        <version>4.1</version>
-        <configuration>
-          <properties>
-            <year>${license.header.year}</year>
-            <owner>${license.header.owner}</owner>
-            <email>${license.header.url}</email>
-          </properties>
-          <licenseSets>
-            <licenseSet>
-              <header>com/mycila/maven/plugin/license/templates/MPL-2.txt</header>
-              <excludes>
-                <exclude>*.md</exclude>
-                <exclude>*.txt</exclude>
-                <exclude>*.xml</exclude>
-                <exclude>*.yml</exclude>
-                <exclude>.run/**</exclude>
-                <exclude>examples/**</exclude>
-                <exclude>src/test/resources/**</exclude>
-                <exclude>src/main/resources/**</exclude>
-                <exclude>.editorconfig</exclude>
-              </excludes>
-            </licenseSet>
-          </licenseSets>
-        </configuration>
-        <!-- Check for missing license headers -->
-        <executions>
-          <execution>
-            <phase>test</phase>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-    <resources>
-      <!-- Filter resource files -->
-      <resource>
-        <directory>src/main/resources</directory>
-        <filtering>true</filtering>
-      </resource>
-      <!-- Include license in built jar -->
-      <resource>
-        <directory>.</directory>
-        <includes>
-          <include>LICENSE</include>
-        </includes>
-      </resource>
-    </resources>
-  </build>
+						<relocation>
+							<!-- Keep plugin classes exactly where they are... -->
+							<pattern>community.leaf.survival</pattern>
+							<shadedPattern>community.leaf.survival</shadedPattern>
+						</relocation>
+						<relocation>
+							<pattern>community.leaf</pattern>
+							<shadedPattern>${shade.relocation}.community.leaf</shadedPattern>
+						</relocation>
+						<relocation>
+							<pattern>com.rezzedup</pattern>
+							<shadedPattern>${shade.relocation}.com.rezzedup</shadedPattern>
+						</relocation>
+						<relocation>
+							<pattern>org.bstats</pattern>
+							<shadedPattern>${shade.relocation}.org.bstats</shadedPattern>
+						</relocation>
+					</relocations>
+					<artifactSet>
+						<!-- Exclude annotations from built jar -->
+						<excludes>
+							<exclude>com.google.code.findbugs:jsr305</exclude>
+							<exclude>org.jetbrains.kotlin:kotlin-annotations-jvm</exclude>
+							<exclude>pl.tlinkowski.annotation:pl.tlinkowski.annotation.basic</exclude>
+						</excludes>
+					</artifactSet>
+					<filters>
+						<filter>
+							<!-- Exclude redundant metadata files -->
+							<artifact>*:*</artifact>
+							<excludes>
+								<exclude>META-INF/**</exclude>
+							</excludes>
+						</filter>
+					</filters>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Add license headers -->
+			<!-- `mvn license:format` or run the `update-license-headers` configuration -->
+			<plugin>
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>4.1</version>
+				<configuration>
+					<properties>
+						<year>${license.header.year}</year>
+						<owner>${license.header.owner}</owner>
+						<email>${license.header.url}</email>
+					</properties>
+					<licenseSets>
+						<licenseSet>
+							<header>com/mycila/maven/plugin/license/templates/MPL-2.txt</header>
+							<excludes>
+								<exclude>*.md</exclude>
+								<exclude>*.txt</exclude>
+								<exclude>*.xml</exclude>
+								<exclude>*.yml</exclude>
+								<exclude>.run/**</exclude>
+								<exclude>examples/**</exclude>
+								<exclude>src/test/resources/**</exclude>
+								<exclude>src/main/resources/**</exclude>
+								<exclude>.editorconfig</exclude>
+							</excludes>
+						</licenseSet>
+					</licenseSets>
+				</configuration>
+				<!-- Check for missing license headers -->
+				<executions>
+					<execution>
+						<phase>test</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<resources>
+			<!-- Filter resource files -->
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+			<!-- Include license in built jar -->
+			<resource>
+				<directory>.</directory>
+				<includes>
+					<include>LICENSE</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
 
 </project>
