@@ -2,22 +2,19 @@ main: community.leaf.survival.concretemixer.ConcreteMixerPlugin
 name: ${project.name}
 version: ${project.version}
 api-version: 1.17
-softdepend: [ GriefPrevention ]
+softdepend: [ CommandAPI ]
 
 authors: [ RezzedUp ]
 description: ${project.description}
 website: ${project.url}
 
-commands:
-  concretemixer:
-    description: Display information about ConcreteMixer.
-    usage: /<command>
-
 permissions:
   concretemixer.admin:
+    default: op
     description: |
       Lets admins reload ConcreteMixer's config.
   concretemixer.cauldrons:
+    default: op
     description: |
       Allows players to use cauldrons to create concrete.
       Only useful if configured to require permission to do so.

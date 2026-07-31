@@ -7,135 +7,54 @@
  */
 package community.leaf.survival.concretemixer;
 
-import com.github.zafarkhaja.semver.Version;
-import com.rezzedup.util.constants.Aggregates;
-import com.rezzedup.util.constants.annotations.AggregatedResult;
-import community.leaf.configvalues.bukkit.DefaultYamlValue;
-import community.leaf.configvalues.bukkit.YamlValue;
-import community.leaf.configvalues.bukkit.data.Load;
-import community.leaf.configvalues.bukkit.data.YamlDataFile;
-import community.leaf.survival.concretemixer.util.Versions;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.Sound;
-import org.bukkit.configuration.ConfigurationSection;
-import pl.tlinkowski.annotation.basic.NullOr;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+public class Config {
+	public static Boolean LOWER_WATER_LEVEL;
+	public static Boolean SPLASH_PARTICLES_EFFECT;
+	public static @Nullable Sound SPLASH_SOUND_EFFECT = null;
+	public static float SPLASH_SOUND_EFFECT_VOLUME = 1.0f;
+	public static float SPLASH_SOUND_EFFECT_PITCH = 1.0f;
+	public static Boolean TRANSFORM_PARTICLES_EFFECT;
+	public static @Nullable Sound TRANSFORM_SOUND_EFFECT = null;
+	public static float TRANSFORM_SOUND_EFFECT_VOLUME = 1.0f;
+	public static float TRANSFORM_SOUND_EFFECT_PITCH = 1.0f;
+	public static Boolean REQUIRE_PERMISSION;
 
-public class Config extends YamlDataFile {
-	public static final YamlValue<Version> VERSION =
-		YamlValue.of("meta.config-version", Versions.YAML)
-			.comments(
-				"Please do not modify this value (it's used to update the config)."
-			)
-			.maybe();
+	private static @Nullable Sound parseSound(JavaPlugin plugin, String path) {
+		NamespacedKey key = NamespacedKey.fromString(plugin.getConfig().getString(path, ""));
+		if (key == null) return null;
 
-	public static final DefaultYamlValue<Boolean> REQUIRE_PERMISSION =
-		YamlValue.ofBoolean("cauldrons.require-permission-node")
-			.comments(
-				"If enabled, players must have access to the 'concretemixer.cauldrons'",
-				"permission node in order to create concrete with cauldrons."
-			)
-			.defaults(false);
+		@Nullable Sound sound = Registry.SOUNDS.get(key);
+		if (sound == null) return null;
 
-	public static final DefaultYamlValue<Boolean> LOWER_WATER_LEVEL =
-		YamlValue.ofBoolean("cauldrons.lower-water-level")
-			.comments(
-				"Should the cauldron's water level be lowered after successfully creating concrete?"
-			)
-			.defaults(true);
-
-	public static final DefaultYamlValue<Boolean> ENABLE_EFFECTS =
-		YamlValue.ofBoolean("effects.enabled")
-			.comments(
-				"Toggle all effects."
-			)
-			.defaults(true);
-
-	public static final DefaultYamlValue<Boolean> SPLASH_PARTICLES_EFFECT =
-		YamlValue.ofBoolean("effects.splash.particles.enabled").defaults(true);
-
-	public static final DefaultYamlValue<Boolean> SPLASH_SOUND_EFFECT =
-		YamlValue.ofBoolean("effects.splash.sound.enabled").defaults(true);
-
-	public static final DefaultYamlValue<Sound> SPLASH_SOUND_EFFECT_NAME =
-		YamlValue.ofSound("effects.splash.sound.name").defaults(Sound.ENTITY_GENERIC_SPLASH);
-
-	public static final DefaultYamlValue<Float> SPLASH_SOUND_EFFECT_VOLUME =
-		YamlValue.ofFloat("effects.splash.sound.volume").defaults(0.75F);
-
-	public static final DefaultYamlValue<Float> SPLASH_SOUND_EFFECT_PITCH =
-		YamlValue.ofFloat("effects.splash.sound.pitch").defaults(1F);
-
-	public static final DefaultYamlValue<Boolean> TRANSFORM_PARTICLES_EFFECT =
-		YamlValue.ofBoolean("effects.transform.particles.enabled").defaults(true);
-
-	public static final DefaultYamlValue<Boolean> TRANSFORM_SOUND_EFFECT =
-		YamlValue.ofBoolean("effects.transform.sound.enabled").defaults(true);
-
-	public static final DefaultYamlValue<Sound> TRANSFORM_SOUND_EFFECT_NAME =
-		YamlValue.ofSound("effects.transform.sound.name").defaults(Sound.BLOCK_FIRE_EXTINGUISH);
-
-	public static final DefaultYamlValue<Float> TRANSFORM_SOUND_EFFECT_VOLUME =
-		YamlValue.ofFloat("effects.transform.sound.volume").defaults(0.65F);
-
-	public static final DefaultYamlValue<Float> TRANSFORM_SOUND_EFFECT_PITCH =
-		YamlValue.ofFloat("effects.transform.sound.pitch").defaults(1.25F);
-
-	@AggregatedResult
-	private static final List<YamlValue<?>> VALUES =
-		Aggregates.fromThisClass().constantsOfType(YamlValue.type()).toList();
-
-	public Config(ConcreteMixerPlugin plugin) {
-		super(plugin.directory(), "config.yml", Load.NOW);
-
-		reloadsWith(() ->
-		{
-			if (isInvalid()) {
-				return;
-			}
-
-			plugin.getLogger().info("Loading config...");
-
-			Version existing = get(VERSION).orElse(Versions.ZERO);
-			boolean outdated = existing.lessThan(plugin.version());
-
-			if (outdated) {
-				set(VERSION, plugin.version());
-			}
-
-			headerFromResource("config.header.txt");
-			defaultValues(VALUES);
-
-			if (isUpdated()) {
-				removeEmptyConfigurationSections(data());
-
-				if (outdated) {
-					if (existing.greaterThan(Versions.ZERO)) {
-						plugin.getLogger().info("Updating config...");
-						backupThenSave(plugin.directory().resolve("backups"), "v" + existing);
-					} else {
-						plugin.getLogger().info("Generating config...");
-						save();
-					}
-				} else {
-					plugin.getLogger().info("Adding missing config values...");
-					backupThenSave(plugin.directory().resolve("backups"), "v" + existing + "-missing-values");
-				}
-			}
-		});
+		return sound;
 	}
 
-	private void removeEmptyConfigurationSections(ConfigurationSection section) {
-		for (String key : section.getKeys(false)) {
-			@NullOr ConfigurationSection child = section.getConfigurationSection(key);
-			if (child == null) {
-				continue;
-			}
+	public static void reload(JavaPlugin plugin) {
+		plugin.saveDefaultConfig();
+		plugin.reloadConfig();
+		FileConfiguration cnf = plugin.getConfig();
 
-			removeEmptyConfigurationSections(child);
-			if (child.getKeys(false).isEmpty()) {
-				section.set(key, null);
-			}
-		}
+		LOWER_WATER_LEVEL = cnf.getBoolean("cauldrons.lower-water-level", true);
+
+		SPLASH_PARTICLES_EFFECT = cnf.getBoolean("effects.splash.particles", true);
+
+		SPLASH_SOUND_EFFECT = parseSound(plugin, "effects.splash.sound.name");
+		SPLASH_SOUND_EFFECT_VOLUME = (float) cnf.getDouble("effects.splash.sound.volume");
+		SPLASH_SOUND_EFFECT_PITCH = (float) cnf.getDouble("effects.splash.sound.pitch");
+
+		TRANSFORM_PARTICLES_EFFECT = cnf.getBoolean("effects.transform.particles", true);
+
+		TRANSFORM_SOUND_EFFECT = parseSound(plugin, "effects.transform.sound.name");
+		TRANSFORM_SOUND_EFFECT_VOLUME = (float) cnf.getDouble("effects.transform.sound.volume", 1.0d);
+		TRANSFORM_SOUND_EFFECT_PITCH = (float) cnf.getDouble("effects.transform.sound.pitch", 1.0d);
+
+		REQUIRE_PERMISSION = cnf.getBoolean("cauldrons.require-permission-node", true);
 	}
 }

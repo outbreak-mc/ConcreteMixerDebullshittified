@@ -7,88 +7,20 @@
  */
 package community.leaf.survival.concretemixer;
 
-import community.leaf.survival.concretemixer.util.Strings;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
-import org.bukkit.util.StringUtil;
+import dev.jorel.commandapi.CommandAPICommand;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-public class ConcreteMixerCommand implements TabExecutor {
-	private final ConcreteMixerPlugin plugin;
-
+public class ConcreteMixerCommand {
 	public ConcreteMixerCommand(ConcreteMixerPlugin plugin) {
-		this.plugin = plugin;
-	}
-
-	private String prefix() {
-		return "&f&l" + plugin.getName() + ".&r";
-	}
-
-	private void message(CommandSender sender, String message) {
-		sender.sendMessage(Strings.colorful(message));
-	}
-
-	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if (args.length == 0) {
-			return version(sender);
-		}
-
-		return switch (args[0].toLowerCase(Locale.ROOT)) {
-			case "version", "ver" -> version(sender);
-			case "reload" -> reload(sender);
-			default -> usage(sender);
-		};
-	}
-
-	@Override
-	public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-		List<String> suggestions = new ArrayList<>();
-
-		if (args.length == 1) {
-			if (plugin.permissions().isAdmin(sender)) {
-				suggestions.add("reload");
-			}
-
-			suggestions.add("ver");
-			suggestions.add("version");
-		}
-
-		List<String> completions = StringUtil.copyPartialMatches(args[0], suggestions, new ArrayList<>());
-		completions.sort(String.CASE_INSENSITIVE_ORDER);
-		return completions;
-	}
-
-	private boolean usage(CommandSender sender) {
-		if (plugin.permissions().isAdmin(sender)) {
-			message(sender, prefix() + "&6 Unknown command.");
-			return true;
-		} else {
-			return version(sender);
-		}
-	}
-
-	private boolean version(CommandSender sender) {
-		message(sender, prefix() + "&6 ConcreteMixer v&e" + plugin.version());
-		message(sender, "&7→&8&o Throw concrete powder into a cauldron... get concrete!");
-		return true;
-	}
-
-	private boolean reload(CommandSender sender) {
-		if (!plugin.permissions().isAdmin(sender)) {
-			return version(sender);
-		}
-
-		plugin.getLogger().info("Reloading...");
-
-		plugin.config().reload();
-		plugin.hooks().reload();
-
-		message(sender, prefix() + "&6 Reloaded.");
-		return true;
+		new CommandAPICommand("concretemixer")
+			.withPermission("concretemixer.admin")
+			.withSubcommands(
+				new CommandAPICommand("reload")
+					.executes((sender, args) -> {
+						Config.reload(plugin);
+						plugin.hooks().reload();
+						sender.sendMessage("Configuration reloaded");
+					})
+			)
+			.register();
 	}
 }

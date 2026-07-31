@@ -13,19 +13,15 @@ import org.bukkit.permissions.Permissible;
 
 public class PermissionHandler {
 	private final ConcreteMixerPlugin plugin;
-	
+
 	public PermissionHandler(ConcreteMixerPlugin plugin) {
 		this.plugin = plugin;
 	}
-	
-	public boolean isAdmin(Permissible permissible) {
-		return permissible.hasPermission("concretemixer.admin");
-	}
-	
+
 	public boolean allowsConvertingConcretePowder(Permissible permissible) {
-		return !plugin.config().getOrDefault(Config.REQUIRE_PERMISSION) || permissible.hasPermission("concretemixer.cauldrons");
+		return !Config.REQUIRE_PERMISSION || permissible.hasPermission("concretemixer.cauldrons");
 	}
-	
+
 	public boolean canAccessCauldron(Player player, Block cauldron) {
 		return plugin.hooks().isCauldronAccessibleToPlayer(player, cauldron);
 	}

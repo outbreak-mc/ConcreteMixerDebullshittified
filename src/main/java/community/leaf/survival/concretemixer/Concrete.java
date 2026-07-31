@@ -32,10 +32,6 @@ public record Concrete(DyeColor color, Material powder, Material concrete) {
 			});
 	}
 
-//	public static Concrete ofColor(DyeColor color) {
-//		return CONCRETE_BY_COLOR.get(color);
-//	}
-
 	public static Optional<Concrete> ofPowder(Material maybePowder) {
 		return Optional.ofNullable(CONCRETE_BY_POWDER.get(maybePowder));
 	}

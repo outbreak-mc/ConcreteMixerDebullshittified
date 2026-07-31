@@ -6,7 +6,7 @@
 
 	<groupId>community.leaf.survival</groupId>
 	<artifactId>concretemixer</artifactId>
-	<version>1.2.1</version>
+	<version>2.0.0</version>
 
 	<name>ConcreteMixer</name>
 	<inceptionYear>2022</inceptionYear>
@@ -53,44 +53,17 @@
 			<artifactId>XSeries</artifactId>
 			<version>11.3.0</version>
 		</dependency>
-		<!-- Hook: GriefPrevention (via jitpack.io) -->
-		<!-- https://github.com/TechFortress/GriefPrevention -->
 		<dependency>
-			<groupId>com.github.techfortress</groupId>
-			<artifactId>griefprevention</artifactId>
-			<version>16.18</version>
+			<groupId>org.jetbrains</groupId>
+			<artifactId>annotations</artifactId>
+			<version>26.0.2</version>
 			<scope>provided</scope>
 		</dependency>
-		<!-- Java SemVer (via maven-central) -->
-		<!-- https://github.com/zafarkhaja/jsemver -->
 		<dependency>
-			<groupId>com.github.zafarkhaja</groupId>
-			<artifactId>java-semver</artifactId>
-			<version>0.9.0</version>
-		</dependency>
-		<!-- LeafCommunity ConfigValues (via jitpack.io) -->
-		<dependency>
-			<groupId>community.leaf.configvalues</groupId>
-			<artifactId>config-values-bukkit</artifactId>
-			<version>0.0.9</version>
-		</dependency>
-		<!-- LeafCommunity Eventful (via jitpack.io) -->
-		<dependency>
-			<groupId>community.leaf.eventful</groupId>
-			<artifactId>events-bukkit</artifactId>
-			<version>0.4.0</version>
-		</dependency>
-		<!-- LeafCommunity Evergreen Bukkit Server Version (via jitpack.io) -->
-		<dependency>
-			<groupId>community.leaf.evergreen</groupId>
-			<artifactId>bukkit-server-version</artifactId>
-			<version>0.0.2</version>
-		</dependency>
-		<!-- LeafCommunity Tasks (via jitpack.io) -->
-		<dependency>
-			<groupId>community.leaf.tasks</groupId>
-			<artifactId>tasks-bukkit</artifactId>
-			<version>0.0.2</version>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-paper-core</artifactId>
+			<version>12.0.0</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
@@ -122,23 +95,6 @@
 						<relocation>
 							<pattern>com.github</pattern>
 							<shadedPattern>${shade.relocation}.com.github</shadedPattern>
-						</relocation>
-						<relocation>
-							<!-- Keep plugin classes exactly where they are... -->
-							<pattern>community.leaf.survival</pattern>
-							<shadedPattern>community.leaf.survival</shadedPattern>
-						</relocation>
-						<relocation>
-							<pattern>community.leaf</pattern>
-							<shadedPattern>${shade.relocation}.community.leaf</shadedPattern>
-						</relocation>
-						<relocation>
-							<pattern>com.rezzedup</pattern>
-							<shadedPattern>${shade.relocation}.com.rezzedup</shadedPattern>
-						</relocation>
-						<relocation>
-							<pattern>org.bstats</pattern>
-							<shadedPattern>${shade.relocation}.org.bstats</shadedPattern>
 						</relocation>
 					</relocations>
 					<artifactSet>

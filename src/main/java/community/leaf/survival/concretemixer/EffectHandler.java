@@ -8,69 +8,37 @@
 package community.leaf.survival.concretemixer;
 
 import com.cryptomorin.xseries.particles.XParticle;
-import community.leaf.configvalues.bukkit.DefaultYamlValue;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Levelled;
-import pl.tlinkowski.annotation.basic.NullOr;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 public class EffectHandler {
-	private final Config config;
-	
-	public EffectHandler(Config config) {
-		this.config = config;
-	}
-	
-	private boolean isEffectEnabled(DefaultYamlValue<Boolean> effect) {
-		return config.getOrDefault(Config.ENABLE_EFFECTS) && config.getOrDefault(effect);
-	}
-	
 	private float fluctuate(float middle) {
 		return ThreadLocalRandom.current().nextFloat(middle - 0.125F, middle + 0.125F);
 	}
-	
-	private void sound(Location location, DefaultYamlValue<Sound> sound, DefaultYamlValue<Float> volume, DefaultYamlValue<Float> pitch) {
-		@NullOr World world = location.getWorld();
-		if (world == null) {
-			return;
-		}
-		
+
+	public void cauldronSplashSound(Location location) {
+		World world = location.getWorld();
+		if (Config.SPLASH_SOUND_EFFECT == null || world == null) return;
+
 		world.playSound(
 			location,
-			config.getOrDefault(sound),
-			config.getOrDefault(volume),
-			fluctuate(config.getOrDefault(pitch))
-		);
-	}
-	
-	public void cauldronSplashSound(Location location) {
-		if (!isEffectEnabled(Config.SPLASH_SOUND_EFFECT)) {
-			return;
-		}
-		
-		sound(
-			location,
-			Config.SPLASH_SOUND_EFFECT_NAME,
+			Config.SPLASH_SOUND_EFFECT,
 			Config.SPLASH_SOUND_EFFECT_VOLUME,
-			Config.SPLASH_SOUND_EFFECT_PITCH
+			fluctuate(Config.SPLASH_SOUND_EFFECT_PITCH)
 		);
 	}
-	
+
 	public void cauldronSplashParticles(Block cauldron) {
-		if (!isEffectEnabled(Config.SPLASH_PARTICLES_EFFECT)) {
-			return;
-		}
-		if (cauldron.getType() != Material.WATER_CAULDRON) {
-			return;
-		}
-		
+		if (!Config.SPLASH_PARTICLES_EFFECT) return;
+		if (cauldron.getType() != Material.WATER_CAULDRON) return;
+
 		double waterHeight = 0.9 - (0.1875 * (3 - ((Levelled) cauldron.getBlockData()).getLevel()));
-		
+
 		cauldron.getWorld().spawnParticle(
 			XParticle.SPLASH.get(),
 			cauldron.getLocation().getBlockX() + 0.5,
@@ -82,12 +50,10 @@ public class EffectHandler {
 			0.15
 		);
 	}
-	
+
 	public void concreteTransformParticles(Block cauldron) {
-		if (!isEffectEnabled(Config.TRANSFORM_PARTICLES_EFFECT)) {
-			return;
-		}
-		
+		if (!Config.TRANSFORM_PARTICLES_EFFECT) return;
+
 		cauldron.getWorld().spawnParticle(
 			XParticle.POOF.get(),
 			cauldron.getLocation().getBlockX() + 0.5,
@@ -100,20 +66,19 @@ public class EffectHandler {
 			0.03
 		);
 	}
-	
+
 	public void concreteTransformSound(Location location) {
-		if (!isEffectEnabled(Config.TRANSFORM_SOUND_EFFECT)) {
-			return;
-		}
-		
-		sound(
+		World world = location.getWorld();
+		if (Config.TRANSFORM_SOUND_EFFECT == null || world == null) return;
+
+		world.playSound(
 			location,
-			Config.TRANSFORM_SOUND_EFFECT_NAME,
+			Config.TRANSFORM_SOUND_EFFECT,
 			Config.TRANSFORM_SOUND_EFFECT_VOLUME,
-			Config.TRANSFORM_SOUND_EFFECT_PITCH
+			fluctuate(Config.TRANSFORM_SOUND_EFFECT_PITCH)
 		);
 	}
-	
+
 	public void concreteTransform(Block cauldron) {
 		concreteTransformParticles(cauldron);
 		concreteTransformSound(cauldron.getLocation());

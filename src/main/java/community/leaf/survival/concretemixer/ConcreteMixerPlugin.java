@@ -7,26 +7,19 @@
  */
 package community.leaf.survival.concretemixer;
 
-import com.github.zafarkhaja.semver.Version;
-import community.leaf.eventful.bukkit.BukkitEventSource;
 import community.leaf.survival.concretemixer.hooks.HookHandler;
-import community.leaf.tasks.bukkit.BukkitTaskSource;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import pl.tlinkowski.annotation.basic.NullOr;
+import org.jetbrains.annotations.Nullable;
 
-import java.nio.file.Path;
+import java.lang.reflect.InvocationTargetException;
 
-public class ConcreteMixerPlugin extends JavaPlugin implements BukkitEventSource, BukkitTaskSource {
-	private @NullOr Version version;
-	private @NullOr Path directory;
-	private @NullOr Config config;
-	private @NullOr EffectHandler effects;
-	private @NullOr HookHandler hooks;
-	private @NullOr PermissionHandler permissions;
+public class ConcreteMixerPlugin extends JavaPlugin {
+	private @Nullable EffectHandler effects;
+	private @Nullable HookHandler hooks;
+	private @Nullable PermissionHandler permissions;
 
-	private static <T> T initialized(@NullOr T thing) {
+	private static <T> T initialized(@Nullable T thing) {
 		if (thing != null) {
 			return thing;
 		}
@@ -35,36 +28,26 @@ public class ConcreteMixerPlugin extends JavaPlugin implements BukkitEventSource
 
 	@Override
 	public void onEnable() {
-		this.version = Version.valueOf(getDescription().getVersion());
-		this.directory = getDataFolder().toPath();
-		this.config = new Config(this);
-		this.effects = new EffectHandler(config);
+		Config.reload(this);
+		this.effects = new EffectHandler();
 		this.hooks = new HookHandler(this);
 		this.permissions = new PermissionHandler(this);
 
-		events().register(new CauldronPowderDropListener(this));
+		getServer().getPluginManager().registerEvents(new CauldronPowderDropListener(this), this);
 
-		ConcreteMixerCommand command = new ConcreteMixerCommand(this);
-		PluginCommand executor = initialized(getCommand("concretemixer"));
-		executor.setExecutor(command);
-		executor.setTabCompleter(command);
-	}
-
-	@Override
-	public Plugin plugin() {
-		return this;
-	}
-
-	public Version version() {
-		return initialized(version);
-	}
-
-	public Path directory() {
-		return initialized(directory);
-	}
-
-	public Config config() {
-		return initialized(config);
+		if (Bukkit.getPluginManager().getPlugin("CommandAPI") != null) {
+			try {
+				Class.forName("community.leaf.survival.concretemixer.ConcreteMixerCommand")
+					.getDeclaredConstructor(ConcreteMixerPlugin.class)
+					.newInstance(this)
+				;
+			} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException |
+			         ClassNotFoundException e) {
+				getLogger().warning("Failed to enable `/concretemixer reload` command: " + e.getMessage());
+			}
+		} else {
+			getLogger().warning("Unable to initialize `/concretemixer reload` command because CommandAPI is not installed.");
+		}
 	}
 
 	public EffectHandler effects() {

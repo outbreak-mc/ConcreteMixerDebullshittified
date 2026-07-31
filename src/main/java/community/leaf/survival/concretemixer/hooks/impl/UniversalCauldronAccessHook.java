@@ -7,49 +7,54 @@
  */
 package community.leaf.survival.concretemixer.hooks.impl;
 
-import community.leaf.eventful.bukkit.ListenerOrder;
 import community.leaf.survival.concretemixer.ConcreteMixerPlugin;
 import community.leaf.survival.concretemixer.hooks.CauldronAccessHook;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.CauldronLevelChangeEvent;
 
-public class UniversalCauldronAccessHook implements CauldronAccessHook {
+public class UniversalCauldronAccessHook implements CauldronAccessHook, Listener {
 	private final ConcreteMixerPlugin plugin;
-	
+
 	// Universal if plugins cancel cauldron level changes...
 	public UniversalCauldronAccessHook(ConcreteMixerPlugin plugin) {
 		this.plugin = plugin;
-		
-		plugin.events().on(CauldronLevelChangeEvent.class, ListenerOrder.LAST, (event) -> {
-			if (event instanceof LevelChangeTestEvent test) {
-				test.complete();
-			}
-		});
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
-	
+
 	@Override
 	public void reload() {
 		// do nothing...
 	}
-	
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void handleCauldronTestEvent(CauldronLevelChangeEvent e) {
+		if (e instanceof LevelChangeTestEvent test)
+			test.complete();
+	}
+
 	@Override
 	public boolean isEnabled() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean isCauldronAccessibleToPlayer(Player player, Block cauldron) {
-		return plugin.events().call(new LevelChangeTestEvent(player, cauldron)).allowed;
+		LevelChangeTestEvent event = new LevelChangeTestEvent(player, cauldron);
+		plugin.getServer().getPluginManager().callEvent(event);
+		return event.allowed;
 	}
-	
+
 	private static class LevelChangeTestEvent extends CauldronLevelChangeEvent {
 		private boolean allowed = false;
-		
+
 		LevelChangeTestEvent(Player player, Block cauldron) {
 			super(cauldron, player, ChangeReason.BOTTLE_FILL, cauldron.getState());
 		}
-		
+
 		void complete() {
 			this.allowed = !isCancelled();
 			setCancelled(true);
